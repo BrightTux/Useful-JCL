@@ -1,0 +1,14 @@
+//DELDEF   JOB (DELDEF),XXXXX,CLASS=A,NOTIFY=&SYSUID
+//*--------------------------------------------------------------------*
+//*  STEP STEP0004  - DELETE DEFINE FILE
+//*--------------------------------------------------------------------*
+//STEP0004 EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+ DELETE  BVSAM.FILE.LOCATION CL PURGE
+    IF MAXCC EQ 8 THEN SET MAXCC EQ 0
+
+ DEFINE   CLUSTER -
+       (NAME(BVSAM.FILE.LOCATION) -
+        MODEL(MODEL.BVSAM.LOCATION))
+//*

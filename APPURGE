@@ -1,0 +1,76 @@
+//APPURGE  JOB (ICETOOL),XXXXX,CLASS=A,NOTIFY=&SYSUID
+//SETOUT   SET HLQ=&SYSUID
+//*-------------------------------------------------------------------*
+//* STEP001 - PGM=IEFBR14 - DELETE TEMP OUTPUT FILE                   *
+//*-------------------------------------------------------------------*
+//STEP001  EXEC PGM=IEFBR14,COND=(0,NE)
+//DD01     DD DSN=&HLQ..TEMPDATA,
+//            SPACE=(CYL,0),UNIT=(SYSDA,6),DISP=(MOD,DELETE)
+//*-------------------------------------------------------------------*
+//* STEP002 - PGM=IEFBR14 - DEFINE TEMP OUTPUT FILE                   *
+//*-------------------------------------------------------------------*
+//STEP002  EXEC PGM=IEFBR14,COND=(0,NE)
+//DD01     DD DSN=&HLQ..TEMPDATA,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(CYL,(15,15),RLSE),
+//            DCB=(MODEL,RECFM=FB,LRECL=250) <-- CHANGE THE LRECL
+//*                                              TO DESIRED LENGTH
+//*-------------------------------------------------------------------*
+//* STEP003 - PGM=SORTOUT - SORT OUT DESIRED DATA (FILTERING)         *
+//*-------------------------------------------------------------------*
+//SORT0003 EXEC PGM=SORT,COND=(00,NE)
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=*
+//*           INSERT INPUT FILE BELOW:
+//*                        V________________________________________V
+//SORTIN   DD DISP=SHR,DSN=INPUT.FILE.LOCATION
+//SORTOUT  DD DISP=MOD,DSN=&HLQ..TEMPDATA
+//SORTWK01 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK02 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK03 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK04 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK05 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK06 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SYSIN    DD *
+ OPTION COPY
+ INCLUDE COND=(216,14,ZD,LT,1000000000,OR,
+              (216,14,ZD,GT,10000000000)
+//*
+//* SORT INRECT INTO DESIRED FILE RECORD TYPE
+//SORT0004 EXEC PGM=SORT,COND=(00,NE)
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=*
+//*           INSERT INPUT FILE BELOW:
+//*                        V________________________________________V
+//SORTIN   DD DISP=MOD,DSN=&HLQ..TEMPDATA
+//SORTOUT  DD  DSN=&&TEMP2,
+//             DISP=(NEW,PASS),UNIT=SYSDA,SPACE=(CYL,(5,5),RLSE),
+//             DCB=(RECFM=FB,LRECL=35,BLKSIZE=0)
+//SORTWK01 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK02 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK03 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK04 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK05 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SORTWK06 DD UNIT=DISK,SPACE=(CYL,(200,15),RLSE)
+//SYSIN    DD *
+ OPTION COPY
+ INREC FIELDS=(1:9,5,
+               7:1,8,
+               16:16,16,
+               3X)
+//*
+//SORT0006 EXEC PGM=SORT,COND=(00,NE)
+//SYSOUT   DD SYSOUT=*
+//SORTJNF1 DD DSN=&&TEMP2,DISP=SHR
+//SORTJNF2 DD DISP=SHR,DSN=OUTPUT.FILE.LOCATION
+//SORTOUT  DD SYSOUT=*
+//SYSIN    DD *
+* CONTROL STATEMENTS FOR JOINKEYS APPLICATION
+ JOINKEYS FILE=F1,FIELDS=(1,5,A)
+ JOINKEYS FILE=F2,FIELDS=(1,5,A)
+ REFORMAT FIELDS=(F1:1,34,F2:6,40)
+* CONTROL STATEMENTS FOR MAIN TASK (JOINED RECORDS)
+ SORT FIELDS=COPY
+/*

@@ -1,0 +1,27 @@
+//BSAMVSAM JOB ((7000)),'L',                                            JOB17272
+//         CLASS=A,MSGLEVEL=(1,1),MSGCLASS=X,NOTIFY=NZ8VRV
+//* -------------------------------------------------------------       00001829
+//*                       ( EMR : 0069 )                                00001830
+//*   D E L E T E / D E F I N E   O N L I N E   DESIRED FILE            00001831
+//* -------------------------------------------------------------       00001832
+//DELDEF01 EXEC PGM=IDCAMS,COND=(0,NE)                                  00001833
+//SYSPRINT DD SYSOUT=*                                                  00001834
+//SYSIN    DD *                                                         00001835
+  DELETE   VSAM.FILE.LOCATION           CLUSTER PURGE
+  DEFINE   CLUSTER  -                                                   00001837
+           (NAME(VSAM.FILE.LOCATION)  -                                 00001838
+           KEYS(24 0) RECSZ(1100 1100)   CYL(200 50)  -                 00001840
+           INDEXED    FREESPACE(5 5)   SPEED -                          00001843
+           REUSE      VOLUME(A B C)    SHAREOPTIONS(2)) -               00001846
+  DATA     (NAME(VSAM.FILE.LOCATION.DATA)) -                            00001847
+  INDEX    (NAME(VSAM.FILE.LOCATION.INDEX))                             00001848
+//*                                                                     00001849
+//**********************************************************************
+//* STEP001 : REPRO REPLACE RECORDS
+//**********************************************************************
+//STEP008  EXEC PGM=IDCAMS
+//SOURCE   DD  DISP=SHR,DSN=BVSAM.FILE.LOCATION
+//TARGET   DD  DISP=SHR,DSN=VSAM.FILE.LOCATION
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+ REPRO    INFILE(SOURCE) OUTFILE(TARGET)

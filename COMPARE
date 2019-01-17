@@ -1,0 +1,18 @@
+//COMPARE  JOB ((7000)),'L',                                            JOB17272
+//         CLASS=A,MSGLEVEL=(1,1),MSGCLASS=X,NOTIFY=&SYSUID
+//*-------------------------------------------------------------------*
+//* STEP001 - PGM=IEBCOMPR - COMPARE SYSUT1 AND SYSUT2                *
+//* FOR MORE INFO: HTTP://WWW-01.IBM.COM/SUPPORT/KNOWLEDGECENTER      *
+//*                /SSLTBW_2.1.0/COM.IBM.ZOS.V2R1.IDAU100/IEBCOMP.HTM *
+//*                                                                   *
+//* RECOMMENDATION: USE THE SUPERC UTILITY INSTEAD OF IEBCOMPR.       *
+//* SUPERC IS PART OF ISPF/PDF AND THE HIGH LEVEL ASSEMBLER           *
+//* TOOLKIT FEATURE. SUPERC CAN BE PROCESSED IN THE FOREGROUND        *
+//* AS WELL AS IN BATCH AND ITS REPORT IS MORE USEFUL.                *
+//*-------------------------------------------------------------------*
+//COMPARE  EXEC PGM=IEBCOMPR,COND=(0,NE)
+//SYSUT1   DD DISP=SHR,DSN=FILE.ONE.LOCATION
+//SYSUT2   DD DISP=SHR,DSN=FILE.TWO.LOCATION
+//SYSOUT   DD *
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY

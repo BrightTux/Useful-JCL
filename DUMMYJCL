@@ -1,0 +1,16 @@
+//DUMMYJCL JOB ,CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID                       JOB00598
+//SETOUT   SET HLQ=&SYSUID
+//*-------------------------------------------------------------------*
+//* STEP003 - PGM=SORTOUT - OUTPUT TEXT IN A SPOOL REPORT
+//*-------------------------------------------------------------------*
+//SORT0003 EXEC PGM=SORT,COND=(00,NE)
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=*
+//SORTIN   DD *
+DUMMY
+//SORTOUT  DD SYSOUT=*
+//SORTWK01 DD UNIT=DISK,SPACE=(CYL,(100,15),RLSE)
+//SYSIN    DD *
+ OPTION COPY
+ OUTREC FIELDS=(DATE,C' ',TIME,C': DUMMY JCL')

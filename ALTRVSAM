@@ -1,0 +1,11 @@
+//ALTRVSM  JOB (,,,,,PRE),'CLARENCE',MSGCLASS=J,MSGLEVEL=(1,1),
+//         NOTIFY=&SYSUID,TIME=1440,REGION=4096K
+//*********************************************************************
+//* ALTER REUSE/NOREUSE ETC
+//*********************************************************************
+//STEP001 EXEC PGM=IDCAMS
+//SYSPRINT DD    SYSOUT=A
+//SYSIN    DD    *
+  ALTER -
+     BVSAM.FILE.LOCATION -
+     REUSE

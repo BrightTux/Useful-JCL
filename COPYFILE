@@ -1,0 +1,14 @@
+//COPYFILE JOB ((7000)),'L',                                            JOB17272
+//         CLASS=A,MSGLEVEL=(1,1),MSGCLASS=X,NOTIFY=&SYSUID
+//*-------------------------------------------------------------------*
+//* STEP001 - PGM=IEBCOPY - COPY SELECTED MEMBERS TO DESTINATION PDS  *
+//*-------------------------------------------------------------------*
+//S1       EXEC PGM=IEBCOPY
+//SYSUT1   DD DISP=SHR,DSN=SOURCE.DIRECTORY      << COPY FROM SOURCE PDS
+//SYSUT2   DD DISP=SHR,DSN=DESTINATION.DIRECTORY      << TO EXISTING DEST PDS
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *                       VV COPY TO ADD MORE MEMBERS
+      COPY INDD=((SYSUT1,R)),OUTDD=SYSUT2
+         SELECT M=(MEMBER1)
+         SELECT M=(MEMBER2)
+         SELECT M=(MEMBER3)
